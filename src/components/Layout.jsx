@@ -10,12 +10,12 @@ const Layout = ({ children }) => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div>
-              <Link to="/" className="text-2xl font-bold">
+              <Link to="/" className="text-black text-2xl font-bold">
                 Administrare Cimitir
               </Link>
             </div>
-            <nav>
-              <ul className="flex space-x-6">
+            <nav >
+              <ul className="text-black flex space-x-6">
                 <li>
                   <Link 
                     to="/" 

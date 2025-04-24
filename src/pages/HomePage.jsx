@@ -17,13 +17,13 @@ const HomePage = () => {
           <div className="flex justify-center space-x-4">
             <Link
               to="/harta"
-              className="bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-md transition-colors"
+              className="font-bold bg-primary hover:bg-primary/90 text-blackfont-bold py-3 px-6 rounded-md transition-colors"
             >
               Explorează Harta
             </Link>
             <Link
               to="/persoane"
-              className="bg-secondary hover:bg-secondary/90 text-white font-bold py-3 px-6 rounded-md transition-colors"
+              className="bg-secondary hover:bg-secondary/90 text-black font-bold py-3 px-6 rounded-md transition-colors"
             >
               Caută Persoane
             </Link>

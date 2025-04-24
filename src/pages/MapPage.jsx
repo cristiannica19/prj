@@ -38,9 +38,9 @@ const MapPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Coordonatele inițiale pentru hartă (vor fi înlocuite cu coordonatele reale)
-  const initialPosition = [44.439663, 26.096306]; // București ca exemplu
-  
+  // Coordonatele pentru hartă (vor fi înlocuite cu coordonatele reale)
+  const initialPosition = [47.13174003051091, 27.565600775884775];
+
   // Încarcă toate sectoarele la încărcarea paginii
   useEffect(() => {
     const loadSectors = async () => {
@@ -227,13 +227,13 @@ const MapPage = () => {
             <div style={{ height: '600px', width: '100%' }}>
               <MapContainer
                 center={initialPosition}
-                zoom={13}
+                zoom={17}
                 style={{ height: '100%', width: '100%' }}
               >
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
+              <TileLayer
+  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+/>  
                 
                 {sectors.map((sector) => (
                   <Polygon
