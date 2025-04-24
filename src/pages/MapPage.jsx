@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Polygon, Marker, Popup, useMap } from 'react-leaflet';
+import { useState, useEffect, useMemo } from 'react';
+import { MapContainer, TileLayer, Polygon, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import Layout from '../components/Layout';
-import DeceasedDetails from '../components/DeceasedDetails';
-import { getSectors, getGravesBySector, getDeceasedByGrave } from '../services/api';
-import { getGraveStatusColor, getStatusText } from '../utils/helpers';
+import SectorDetailModal from '../components/SectorDetailModal';
+import { getSectors, getGravesBySector } from '../services/api';
 import L from 'leaflet';
 
 // Corectăm problema cu iconițele Leaflet
@@ -15,16 +14,25 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
 });
 
-// Componenta pentru centrarea hărții pe un sector
-const SetViewOnSelect = ({ coordinates }) => {
+// Componenta pentru centrarea hărții
+const SetViewOnLoad = ({ sectors }) => {
   const map = useMap();
   
   useEffect(() => {
-    if (coordinates && coordinates.length > 0) {
-      const bounds = L.latLngBounds(coordinates);
-      map.fitBounds(bounds, { padding: [50, 50] });
+    if (sectors && sectors.length > 0) {
+      // Creăm un bounds care include toate sectoarele
+      const bounds = L.latLngBounds([]);
+      sectors.forEach(sector => {
+        if (sector.coordinates && sector.coordinates.length > 0) {
+          bounds.extend(L.latLngBounds(sector.coordinates));
+        }
+      });
+      
+      if (bounds.isValid()) {
+        map.fitBounds(bounds, { padding: [50, 50] });
+      }
     }
-  }, [coordinates, map]);
+  }, [sectors, map]);
   
   return null;
 };
@@ -33,14 +41,13 @@ const MapPage = () => {
   const [sectors, setSectors] = useState([]);
   const [selectedSector, setSelectedSector] = useState(null);
   const [graves, setGraves] = useState([]);
-  const [selectedGrave, setSelectedGrave] = useState(null);
-  const [deceasedList, setDeceasedList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
-  // Coordonatele pentru hartă (vor fi înlocuite cu coordonatele reale)
-  const initialPosition = [47.13174003051091, 27.565600775884775];
-
+  // Coordonatele inițiale pentru hartă (vor fi înlocuite cu coordonatele reale)
+  const initialPosition = [47.13204401370525, 27.56565980654888]; 
+  
   // Încarcă toate sectoarele la încărcarea paginii
   useEffect(() => {
     const loadSectors = async () => {
@@ -76,69 +83,32 @@ const MapPage = () => {
       }
     };
     
-    loadGraves();
+    if (selectedSector) {
+      loadGraves();
+    }
   }, [selectedSector]);
-
-  // Încarcă persoanele decedate când se selectează un mormânt
-  useEffect(() => {
-    const loadDeceased = async () => {
-      if (!selectedGrave) return;
-      
-      try {
-        setLoading(true);
-        const data = await getDeceasedByGrave(selectedGrave.id);
-        setDeceasedList(data);
-      } catch (err) {
-        setError('Nu s-au putut încărca informațiile despre persoanele decedate.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    loadDeceased();
-  }, [selectedGrave]);
 
   // Funcție pentru gestionarea selecției unui sector
   const handleSectorSelect = (sector) => {
     setSelectedSector(sector);
-    setSelectedGrave(null);
-    setDeceasedList([]);
-  };
-
-  // Funcție pentru gestionarea selecției unui mormânt
-  const handleGraveSelect = (grave) => {
-    setSelectedGrave(grave);
+    setShowModal(true);
   };
 
   // Funcție pentru a obține un stil pentru un sector în funcție de selecție
   const getSectorStyle = (sector) => {
-    const isSelected = selectedSector && selectedSector.id === sector.id;
-    
     return {
-      fillColor: isSelected ? '#3b82f6' : '#9ca3af',
+      fillColor: '#3b82f6',
       weight: 2,
       opacity: 1,
-      color: isSelected ? '#1e40af' : '#4b5563',
-      fillOpacity: isSelected ? 0.4 : 0.2,
+      color: '#1e40af',
+      fillOpacity: 0.3,
     };
   };
 
-  // Funcție pentru a obține un icon personalizat pentru un mormânt în funcție de status
-  const getGraveIcon = (status) => {
-    return L.divIcon({
-      className: 'grave-marker',
-      html: `<div style="
-        width: 20px;
-        height: 20px;
-        background-color: ${getGraveStatusColor(status)};
-        border-radius: 50%;
-        border: 2px solid white;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-      "></div>`,
-      iconSize: [20, 20],
-      iconAnchor: [10, 10],
-    });
+  // Funcție pentru închiderea modalului
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedSector(null);
   };
 
   return (
@@ -146,7 +116,7 @@ const MapPage = () => {
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-primary mb-2">Harta Cimitirului</h1>
         <p className="text-gray-600">
-          Selectați un sector pentru a vedea mormintele, apoi selectați un mormânt pentru a vedea detalii.
+          Selectați un sector pentru a vedea detaliile și mormintele din acel sector.
         </p>
       </div>
 
@@ -157,7 +127,7 @@ const MapPage = () => {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Sidebar cu sectoare și detalii */}
+        {/* Sidebar cu sectoare */}
         <div className="lg:col-span-1">
           <div className="bg-white p-4 rounded-lg shadow-md mb-6">
             <h2 className="text-xl font-semibold mb-3">Sectoare</h2>
@@ -169,11 +139,7 @@ const MapPage = () => {
                   <li key={sector.id} className="py-2">
                     <button
                       onClick={() => handleSectorSelect(sector)}
-                      className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
-                        selectedSector && selectedSector.id === sector.id
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'hover:bg-gray-100'
-                      }`}
+                      className="w-full text-left px-3 py-2 rounded-md transition-colors hover:bg-gray-100"
                     >
                       {sector.name}
                     </button>
@@ -182,43 +148,6 @@ const MapPage = () => {
               </ul>
             )}
           </div>
-
-          {selectedGrave && (
-            <div className="bg-white p-4 rounded-lg shadow-md">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-xl font-semibold">Detalii Mormânt</h2>
-                <span 
-                  className="px-2 py-1 rounded-full text-xs font-medium"
-                  style={{ 
-                    backgroundColor: `${getGraveStatusColor(selectedGrave.status)}20`,
-                    color: getGraveStatusColor(selectedGrave.status)
-                  }}
-                >
-                  {getStatusText(selectedGrave.status)}
-                </span>
-              </div>
-              
-              <p className="text-gray-600 mb-2">
-                <span className="font-semibold">Număr:</span> {selectedGrave.grave_number}
-              </p>
-              <p className="text-gray-600 mb-4">
-                <span className="font-semibold">Sector:</span> {selectedSector?.name}
-              </p>
-              
-              <h3 className="font-semibold mb-2">Persoane decedate:</h3>
-              {loading ? (
-                <p className="text-center py-2 text-gray-500">Se încarcă...</p>
-              ) : deceasedList.length > 0 ? (
-                <div className="space-y-4">
-                  {deceasedList.map((deceased) => (
-                    <DeceasedDetails key={deceased.id} deceased={deceased} />
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-500 italic">Nu există informații despre persoane decedate pentru acest mormânt.</p>
-              )}
-            </div>
-          )}
         </div>
 
         {/* Harta */}
@@ -230,11 +159,12 @@ const MapPage = () => {
                 zoom={17}
                 style={{ height: '100%', width: '100%' }}
               >
-              <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                  url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-/>  
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
                 
+                {/* Afișarea sectoarelor pe harta generală */}
                 {sectors.map((sector) => (
                   <Polygon
                     key={sector.id}
@@ -248,63 +178,40 @@ const MapPage = () => {
                       <div>
                         <h3 className="font-bold">{sector.name}</h3>
                         {sector.description && <p>{sector.description}</p>}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevenim propagarea click-ului
+                            handleSectorSelect(sector);
+                          }}
+                          className="mt-2 bg-primary text-white px-3 py-1 rounded-md text-sm"
+                        >
+                          Vizualizează morminte
+                        </button>
                       </div>
                     </Popup>
                   </Polygon>
                 ))}
                 
-                {selectedSector && graves.map((grave) => (
-                  <Marker
-                    key={grave.id}
-                    position={[grave.coordinates.lat, grave.coordinates.lng]}
-                    icon={getGraveIcon(grave.status)}
-                    eventHandlers={{
-                      click: () => handleGraveSelect(grave),
-                    }}
-                  >
-                    <Popup>
-                      <div>
-                        <h3 className="font-bold">Mormânt {grave.grave_number}</h3>
-                        <p>Status: {getStatusText(grave.status)}</p>
-                      </div>
-                    </Popup>
-                  </Marker>
-                ))}
-                
-                {selectedSector && (
-                  <SetViewOnSelect coordinates={selectedSector.coordinates} />
-                )}
+                {/* Componenta pentru centrarea hărții */}
+                <SetViewOnLoad sectors={sectors} />
               </MapContainer>
-            </div>
-            
-            <div className="mt-4 flex flex-wrap gap-4">
-              <div className="flex items-center">
-                <div 
-                  className="w-4 h-4 rounded-full mr-2" 
-                  style={{ backgroundColor: getGraveStatusColor('ocupat') }}
-                ></div>
-                <span className="text-sm">Ocupat</span>
-              </div>
-              <div className="flex items-center">
-                <div 
-                  className="w-4 h-4 rounded-full mr-2" 
-                  style={{ backgroundColor: getGraveStatusColor('rezervat') }}
-                ></div>
-                <span className="text-sm">Rezervat</span>
-              </div>
-              <div className="flex items-center">
-                <div 
-                  className="w-4 h-4 rounded-full mr-2" 
-                  style={{ backgroundColor: getGraveStatusColor('liber') }}
-                ></div>
-                <span className="text-sm">Liber</span>
-              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Modal pentru afișarea detaliată a sectorului */}
+      {showModal && selectedSector && (
+        <SectorDetailModal
+          sector={selectedSector}
+          graves={graves}
+          onClose={handleCloseModal}
+          loading={loading}
+        />
+      )}
     </Layout>
   );
 };
 
 export default MapPage;
+
