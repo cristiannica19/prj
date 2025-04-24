@@ -14,7 +14,7 @@ const HomePage = () => {
             Bine ați venit în sistemul de administrare și gestionare a cimitirului.
             Aici puteți explora harta cimitirului și găsi informații despre persoanele decedate.
           </p>
-          <div className="flex justify-center space-x-4">
+          {/* <div className="flex justify-center space-x-4">
             <Link
               to="/harta"
               className="font-bold bg-primary hover:bg-primary/90 text-blackfont-bold py-3 px-6 rounded-md transition-colors"
@@ -27,7 +27,7 @@ const HomePage = () => {
             >
               Caută Persoane
             </Link>
-          </div>
+          </div> */}
         </div>
 
         {/* Features Section */}

@@ -88,7 +88,7 @@ const PeoplePage = () => {
           <div className="flex gap-2">
             <button
               onClick={handleSearch}
-              className="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-colors"
+              className="bg-gray-200 hover:bg-primary/90 text-black px-4 py-2 rounded-md transition-colors"
             >
               Caută
             </button>
@@ -164,7 +164,7 @@ const PeoplePage = () => {
                 <div className="mt-6">
                   <Link
                     to={`/harta?sector=${selectedPerson.sector_name}&grave=${selectedPerson.grave_number}`}
-                    className="block w-full bg-primary hover:bg-primary/90 text-white text-center py-2 px-4 rounded-md transition-colors"
+                    className="block w-full bg-primary hover:bg-primary/90 text-black font-bold text-center py-2 px-4 rounded-md transition-colors"
                   >
                     Vezi pe Hartă
                   </Link>
