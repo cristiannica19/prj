@@ -10,38 +10,49 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Verificăm dacă există un token în localStorage
-    const token = localStorage.getItem('token');
-    if (token) {
-      fetchUserProfile(token);
-    } else {
-      setLoading(false);
-    }
+ useEffect(() => {
+    const verifyToken = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Adaugă timeout pentru a evita blocarea la infinit
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const response = await axios.get('http://localhost:3000/api/auth/me', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (response.data && response.data.user) {
+          setUser(response.data.user);
+        } else {
+          // Dacă răspunsul nu conține date valide, eliminăm tokenul
+          localStorage.removeItem('token');
+        }
+      } catch (err) {
+        console.error('Eroare la verificarea tokenului:', err);
+        // Eliminăm tokenul în caz de eroare
+        localStorage.removeItem('token');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    verifyToken();
   }, []);
 
   // Funcție pentru obținerea profilului utilizatorului folosind tokenul
-  const fetchUserProfile = async (token) => {
-    try {
-      setLoading(true);
-      const response = await axios.get('http://localhost:3000/api/auth/me', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      
-      setUser(response.data.user);
-      setError(null);
-    } catch (err) {
-      console.error('Eroare la obținerea profilului:', err);
-      // În caz de eroare, eliminăm tokenul invalid
-      localStorage.removeItem('token');
-      setUser(null);
-      setError('Sesiunea a expirat. Vă rugăm să vă autentificați din nou.');
-    } finally {
-      setLoading(false);
-    }
-  };
+ 
+
 
   // Funcție pentru înregistrare
   const register = async (userData) => {
@@ -59,7 +70,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Funcție pentru autentificare
-  const login = async (credentials) => {
+    const login = async (credentials) => {
     try {
       setLoading(true);
       const response = await axios.post('http://localhost:3000/api/auth/login', credentials);

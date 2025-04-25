@@ -17,24 +17,20 @@ const AdminDashboard = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
+  const [dataLoading, setDataLoading] = useState(false);
+
+
+
  // Verificăm dacă utilizatorul este admin
 useEffect(() => {
-  if (!loading) {  // Adaugă această verificare
-    if (!user) {
-      navigate('/login');
-    } else if (!isAdmin()) {
-      navigate('/profile');
-    } else {
-      loadUsers();
-      loadSectors();
-    }
-  }
-}, [user, isAdmin, navigate]); 
+  loadUsers();
+  loadSectors();
+}, []);
 
   // Încărcăm toți utilizatorii
   const loadUsers = async () => {
     try {
-      setLoading(true);
+      setDataLoading(true);
       const response = await axios.get(
         'http://localhost:3000/api/users',
         { headers: getAuthHeader() }
@@ -44,7 +40,7 @@ useEffect(() => {
       console.error('Eroare la încărcarea utilizatorilor:', err);
       setError('Nu s-au putut încărca utilizatorii.');
     } finally {
-      setLoading(false);
+      setDataLoading(false);
     }
   };
 
@@ -174,7 +170,9 @@ useEffect(() => {
     loadGraveContactPerson(grave.id);
   };
 
-  if (!user || !isAdmin()) return null;
+  
+
+
 
   return (
     <Layout>
@@ -202,7 +200,7 @@ useEffect(() => {
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4">Utilizatori</h2>
           
-          {loading && !users.length ? (
+          {dataLoading && !users.length ? (
             <p className="text-center py-4 text-gray-500">Se încarcă utilizatorii...</p>
           ) : (
             <div className="max-h-96 overflow-y-auto">

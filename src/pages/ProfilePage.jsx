@@ -10,18 +10,21 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [initialized, setInitialized] = useState(false);
 
 
  // Verificăm dacă utilizatorul este autentificat
 useEffect(() => {
-  if (!loading) {  // Adaugă această verificare
-    if (!user) {
-      navigate('/login');
-    } else {
-      loadUserGraves();
+    if (!loading && !initialized) {
+      setInitialized(true);
+      
+      if (!user) {
+        navigate('/login');
+      } else {
+        loadUserGraves();
+      }
     }
-  }
-}, [user, navigate]);  // Adaugă loading în dependențe
+  }, [loading, user, initialized, navigate]);  // Adaugă loading în dependențe
 
   // Încărcăm mormintele asociate cu utilizatorul
   const loadUserGraves = async () => {
@@ -46,6 +49,16 @@ useEffect(() => {
     logout();
     navigate('/login');
   };
+
+    if (loading && !initialized) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center h-screen">
+          <p className="text-xl text-gray-600">Se verifică autentificarea...</p>
+        </div>
+      </Layout>
+    );
+  }
 
   if (!user) return null;
 
