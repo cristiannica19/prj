@@ -1,9 +1,15 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Layout = ({ children }) => {
   const location = useLocation();
-  const { user, isAdmin } = useAuth();
+  const navigate = useNavigate();
+  const { user, isAdmin, logout } = useAuth();
+  
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
   
   return (
     <div className="flex flex-col min-h-screen">
@@ -55,17 +61,21 @@ const Layout = ({ children }) => {
                 
                 {user ? (
                   <>
-                    <li>
-                      <Link 
-                        to="/profile" 
-                        className={`hover:text-accent transition-colors ${
-                          location.pathname === '/profile' ? 'font-semibold text-accent' : ''
-                        }`}
-                      >
-                        Profil
-                      </Link>
-                    </li>
+                    {/* Afișează link-ul Profil DOAR pentru utilizatorii non-admin */}
+                    {!isAdmin() && (
+                      <li>
+                        <Link 
+                          to="/profile" 
+                          className={`hover:text-accent transition-colors ${
+                            location.pathname === '/profile' ? 'font-semibold text-accent' : ''
+                          }`}
+                        >
+                          Profil
+                        </Link>
+                      </li>
+                    )}
                     
+                    {/* Afișează link-ul Admin DOAR pentru utilizatorii admin */}
                     {isAdmin() && (
                       <li>
                         <Link 
@@ -76,6 +86,18 @@ const Layout = ({ children }) => {
                         >
                           Admin
                         </Link>
+                      </li>
+                    )}
+                    
+                    {/* Buton de deconectare DOAR pentru administratori */}
+                    {isAdmin() && (
+                      <li>
+                        <button 
+                          onClick={handleLogout}
+                          className="hover:text-accent transition-colors cursor-pointer px-1 border-transparent text-sm font-medium rounded-md text-black bg-gray-200 hover:bg-primary/90"
+                        >
+                          Deconectare
+                        </button>
                       </li>
                     )}
                   </>
