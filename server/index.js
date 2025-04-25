@@ -3,6 +3,11 @@ const cors = require('cors');
 const pool = require('./db');
 require('dotenv').config();
 
+// Importăm routerele noi pentru autentificare și gestionarea utilizatorilor
+const { router: authRouter } = require('./routes/auth');
+const usersRouter = require('./routes/users');
+const gravesContactRouter = require('./routes/graves-contact');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -10,7 +15,16 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// ROUTES PENTRU SECTOARE
+// Rutele pentru autentificare
+app.use('/api/auth', authRouter);
+
+// Rutele pentru utilizatori
+app.use('/api/users', usersRouter);
+
+// Rutele pentru persoanele de legătură ale mormintelor
+app.use('/api/graves', gravesContactRouter);
+
+// ROUTES PENTRU SECTOARE (păstrate din versiunea anterioară)
 // Obține toate sectoarele
 app.get('/api/sectors', async (req, res) => {
   try {

@@ -193,7 +193,7 @@ const MapPage = () => {
                 ))}
                 
                 {/* Componenta pentru centrarea hărții */}
-                <SetViewOnLoad sectors={sectors} />
+                {/* <SetViewOnLoad sectors={sectors} /> */}
               </MapContainer>
             </div>
           </div>
