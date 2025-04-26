@@ -92,3 +92,4 @@ export const getDeceasedByGrave = async (graveId) => {
     throw error;
   }
 };
+

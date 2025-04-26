@@ -112,6 +112,29 @@ app.get('/api/deceased/search', async (req, res) => {
   }
 });
 
+// Căutare mormânt după număr și sector
+app.get('/api/graves/search', async (req, res) => {
+  try {
+    const { grave_number, sector_name } = req.query;
+    
+    if (!grave_number || !sector_name) {
+      return res.status(400).json({ message: 'Numărul mormântului și numele sectorului sunt obligatorii.' });
+    }
+    
+    const graves = await pool.query(`
+      SELECT g.* 
+      FROM graves g
+      JOIN sectors s ON g.sector_id = s.id
+      WHERE g.grave_number = $1 AND s.name = $2
+    `, [grave_number, sector_name]);
+    
+    res.json(graves.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // Obține o persoană decedată după ID
 app.get('/api/deceased/:id', async (req, res) => {
   try {

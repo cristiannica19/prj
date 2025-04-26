@@ -661,22 +661,22 @@ const SectorDetailModal = ({ sector, graves, onClose, loading }) => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-0.1">
                     Detalii suplimentare
                   </label>
                   <textarea
                     name="details"
                     value={editFormData.details}
                     onChange={handleEditFormChange}
-                    rows="4"
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+                    rows="2"
+                    className="w-full p-1 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
                   ></textarea>
                 </div>
                 
                 <button
                   onClick={saveGraveChanges}
                   disabled={loadingDeceased}
-                  className="w-full bg-primary hover:bg-primary/90 text-black font-medium py-2 px-4 rounded-md transition-colors"
+                  className="w-full bg-gray-200 hover:bg-primary/90 text-black font-medium py-2 px-4 rounded-md transition-colors"
                 >
                   {loadingDeceased ? 'Se salvează...' : 'Salvează modificările'}
                 </button>
@@ -711,12 +711,14 @@ const SectorDetailModal = ({ sector, graves, onClose, loading }) => {
                     </p>
                   )}
                   
-                  <button
-                    onClick={startAddingDeceased}
-                    className="mt-4 w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-md transition-colors"
-                  >
-                    Adaugă persoană decedată
-                  </button>
+                {editFormData.status !== 'ocupat' && (
+  <button
+    onClick={startAddingDeceased}
+    className="mt-2 mb-2 w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-md transition-colors"
+  >
+    Adaugă persoană decedată
+  </button>
+)}
                 </div>
               </div>
             ) : (
@@ -776,14 +778,14 @@ const SectorDetailModal = ({ sector, graves, onClose, loading }) => {
                 )}
                 
                 {/* Buton de adăugare persoană decedată pentru admin */}
-                {isAdmin() && (
-                  <button
+                {isAdmin() && selectedGrave.status !== 'ocupat' && (
+                <button
                     onClick={startAddingDeceased}
-                    className="mt-4 w-full bg-gray-200 hover:bg-primary/90 text-black font-medium py-2 px-4 rounded-md transition-colors"
-                  >
+                    className="mt-2 w-full bg-gray-200 hover:bg-primary/90 text-black font-medium py-2 px-4 rounded-md transition-colors"
+                >
                     Adaugă persoană decedată
-                  </button>
-                )}
+              </button>
+)}
               </>
             )}
           </div>
