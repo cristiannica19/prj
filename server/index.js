@@ -7,6 +7,10 @@ require('dotenv').config();
 const { router: authRouter } = require('./routes/auth');
 const usersRouter = require('./routes/users');
 const gravesContactRouter = require('./routes/graves-contact');
+const gravesRouter = require('./routes/graves');
+const deceasedRouter = require('./routes/deceased');
+
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -137,6 +141,12 @@ app.get('/api/graves/:id/deceased', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+app.use('/api/graves', gravesRouter);
+
+app.use('/api/deceased', deceasedRouter);
+
+
 
 // Pornește serverul
 app.listen(PORT, () => {
