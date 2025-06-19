@@ -6,7 +6,7 @@ const ProtectedRoute = ({ children, adminRequired = false }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
 
-  // Show a loading indicator while checking authentication
+  // Se arata un indicator de loading cat timp se verifica autentificarea
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -15,17 +15,17 @@ const ProtectedRoute = ({ children, adminRequired = false }) => {
     );
   }
 
-  // If not logged in, redirect to login page
+  // Daca nu este logat, se face redirect la pagina de login
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // For admin-only routes
+  // Doar pentru rutele admin
   if (adminRequired && user.role !== 'admin') {
     return <Navigate to="/profile" replace />;
   }
 
-  // If authenticated (and admin if required), render the protected component
+  //  Daca este autentificat(si daca este admin), se face render la children
   return children;
 };
 

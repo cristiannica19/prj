@@ -45,7 +45,7 @@ const MapPage = () => {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  // Coordonatele inițiale pentru hartă (vor fi înlocuite cu coordonatele reale)
+  // Coordonatele inițiale pentru hartă (coordonatele reale)
   const initialPosition = [47.13204401370525, 27.56565980654888]; 
   
   // Încarcă toate sectoarele la încărcarea paginii
