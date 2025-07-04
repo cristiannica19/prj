@@ -70,11 +70,11 @@ const HomePage = () => {
 
         {/* Contact/Service Hours Section */}
         <div className="bg-white p-8 rounded-lg shadow-md border border-gray-200 mb-8">
-          <h2 className="text-2xl font-bold text-primary mb-4">Program și servicii</h2>
+          <h2 className="text-2xl font-bold text-primary mb-4 ">Program și servicii</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 ">
             <div>
-              <h3 className="text-xl font-semibold mb-3">Program de vizitare</h3>
+              <h3 className="text-xl font-semibold mb-3 inline-block border-b border-gray-400">Program de vizitare</h3>
               <ul className="space-y-2 text-gray-700">
                 <li><strong>Luni - Vineri:</strong> 08:00 - 20:00</li>
                 <li><strong>Sâmbătă - Duminică:</strong> 08:00 - 22:00</li>
@@ -83,7 +83,7 @@ const HomePage = () => {
             </div>
             
             <div>
-              <h3 className="text-xl font-semibold mb-3">Servicii disponibile</h3>
+              <h3 className="text-xl font-semibold mb-3 inline-block border-b border-gray-400">Servicii disponibile</h3>
               <ul className="space-y-2 text-gray-700">
                 <li>Întreținere morminte</li>
                 <li>Aranjamente florale</li>
