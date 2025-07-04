@@ -463,7 +463,7 @@ const PeoplePage = () => {
                   <button
                     onClick={saveDeceasedChanges}
                     disabled={editLoading}
-                    className="flex-1 bg-primary hover:bg-primary/90 text-black font-medium py-2 px-4 rounded-md transition-colors"
+                    className="flex-1 bg-gray-300 hover:bg-gray-400  text-black font-medium py-2 px-4 rounded-md transition-colors"
                   >
                     {editLoading ? 'Se salvează...' : 'Salvează'}
                   </button>

@@ -37,8 +37,8 @@ const SectorDetailModal = ({ sector, graves, onClose, loading }) => {
   });
 
   // Constante pentru layout-ul grilei de morminte
-  const GRID_COLUMNS = 6;
-  const GRAVE_SIZE = 60;
+  const GRID_COLUMNS = 9;
+  const GRAVE_SIZE = 72;
   const GRAVE_MARGIN = 5;
 
   // Organizăm mormintele în grid
@@ -377,7 +377,7 @@ const SectorDetailModal = ({ sector, graves, onClose, loading }) => {
       onClick={handleClose}
     >
       <div 
-        className={`bg-white rounded-lg shadow-xl w-full max-w-7xl max-h-[90vh] flex flex-col transition-transform duration-300 ease-in-out ${
+        className={`bg-white rounded-lg shadow-xl border-1 border-black w-full max-w-7xl max-h-[90vh] flex flex-col transition-transform duration-300 ease-in-out ${
           modalVisible ? 'scale-100' : 'scale-95'
         }`}
         onClick={(e) => e.stopPropagation()}
@@ -583,7 +583,7 @@ const SectorDetailModal = ({ sector, graves, onClose, loading }) => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 ">
                     Detalii suplimentare
                   </label>
                   <textarea
@@ -661,7 +661,7 @@ const SectorDetailModal = ({ sector, graves, onClose, loading }) => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-0.1">
+                  <label className="block text-sm font-medium text-gray-700">
                     Detalii suplimentare
                   </label>
                   <textarea

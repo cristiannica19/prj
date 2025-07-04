@@ -127,28 +127,44 @@ const MapPage = () => {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Sidebar cu sectoare */}
-        <div className="lg:col-span-1">
-          <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-            <h2 className="text-xl font-semibold mb-3">Sectoare</h2>
-            {loading && !sectors.length ? (
-              <p className="text-center py-4 text-gray-500">Se încarcă sectoarele...</p>
-            ) : (
-              <ul className="divide-y divide-gray-200">
-                {sectors.map((sector) => (
-                  <li key={sector.id} className="py-2">
-                    <button
-                      onClick={() => handleSectorSelect(sector)}
-                      className="w-full text-left px-3 py-2 rounded-md transition-colors hover:bg-gray-100"
-                    >
-                      {sector.name}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </div>
+        
+        {/* Sidebar cu dropdown pentru sectoare */}
+<div className="lg:col-span-1">
+  <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+    <h2 className="text-xl font-semibold mb-3">Selectează sectorul</h2>
+    {loading && !sectors.length ? (
+      <p className="text-center py-4 text-gray-500">Se încarcă sectoarele...</p>
+    ) : (
+      <div className="space-y-4">
+        {/* Dropdown pentru selectarea sectorului */}
+        <select
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+          value={selectedSector ? selectedSector.id : ''}
+          onChange={(e) => {
+            const selectedId = e.target.value;
+            if (selectedId) {
+              // Găsim sectorul cu ID-ul selectat din array-ul de sectoare
+              const sector = sectors.find(s => s.id === parseInt(selectedId));
+              if (sector) {
+                handleSectorSelect(sector);
+              }
+            }
+          }}
+        >
+          {/* Opțiunea implicită care indică utilizatorului să selecteze */}
+          <option value="">Alege un sector </option>
+          
+          {/* Generăm câte o opțiune pentru fiecare sector */}
+          {sectors.map((sector) => (
+            <option key={sector.id} value={sector.id}>
+              {sector.name}
+            </option>
+          ))}
+        </select>   
+      </div>
+    )}
+  </div>
+</div>
 
         {/* Harta */}
         <div className="lg:col-span-2">
@@ -174,7 +190,7 @@ const MapPage = () => {
                       click: () => handleSectorSelect(sector),
                     }}
                   >
-                    <Popup>
+                   
                       <div>
                         <h3 className="font-bold">{sector.name}</h3>
                         {sector.description && <p>{sector.description}</p>}
@@ -188,7 +204,7 @@ const MapPage = () => {
                           Vizualizează morminte
                         </button>
                       </div>
-                    </Popup>
+                   
                   </Polygon>
                 ))}
                 

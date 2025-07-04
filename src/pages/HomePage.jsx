@@ -19,7 +19,7 @@ const HomePage = () => {
         {/* Features Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-            <h2 className="text-xl font-semibold text-primary mb-3">Hartă Interactivă</h2>
+            <h2 className="text-xl font-semibold text-primary mb-3">Hartă interactivă</h2>
             <p className="text-gray-600 mb-4">
               Explorați harta interactivă a cimitirului pentru a vizualiza sectoarele și mormintele.
             </p>

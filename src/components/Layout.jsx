@@ -22,7 +22,7 @@ const Layout = ({ children }) => {
                 Administrare Cimitir
               </Link>
               <div className="md:hidden">
-                {/* Aici puteți adăuga un buton pentru meniul mobil dacă doriți */}
+                
               </div>
             </div>
             
@@ -94,7 +94,7 @@ const Layout = ({ children }) => {
                       <li>
                         <button 
                           onClick={handleLogout}
-                          className="hover:text-accent transition-colors cursor-pointer px-1 border-transparent text-sm font-medium rounded-md text-black bg-gray-200 hover:bg-primary/90"
+                          className="hover:text-accent transition-colors cursor-pointer p-1 border-transparent text-sm font-medium rounded-md text-black bg-gray-200 hover:bg-primary/90"
                         >
                           Deconectare
                         </button>

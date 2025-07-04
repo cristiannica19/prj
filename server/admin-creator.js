@@ -17,7 +17,7 @@ async function createAdmin() {
     // Solicită informațiile admin-ului de la linia de comandă sau setează-le direct
     const username = 'admin';
     const email = 'admin@example.com';
-    const password = 'admin'; // Înlocuiește cu o parolă sigură
+    const password = 'admin'; // 
     const firstName = 'Administrator';
     const lastName = 'Sistem';
     const phone = '0700000000';
