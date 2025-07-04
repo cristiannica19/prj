@@ -114,7 +114,7 @@ const MapPage = () => {
   return (
     <Layout>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-primary mb-2">Harta Cimitirului</h1>
+        <h1 className="text-3xl font-bold text-primary mb-2">Harta cimitirului</h1>
         <p className="text-gray-600">
           Selectați un sector pentru a vedea detaliile și mormintele din acel sector.
         </p>

@@ -226,7 +226,7 @@ const PeoplePage = () => {
   return (
     <Layout>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-primary mb-2">Persoane Decedate</h1>
+        <h1 className="text-3xl font-bold text-primary mb-2">Persoane decedate</h1>
         <p className="text-gray-600">
           Căutați în lista persoanelor decedate pentru a găsi informații despre locația mormântului.
         </p>
@@ -294,7 +294,7 @@ const PeoplePage = () => {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="p-4 bg-gray-50 border-b flex justify-between items-center">
-              <h2 className="text-xl font-semibold">Lista Persoane</h2>
+              <h2 className="text-xl font-semibold">Lista persoane</h2>
               <span className="text-sm text-gray-500">
                 {filteredList.length} {filteredList.length === 1 ? 'persoană' : 'persoane'} găsite
               </span>
@@ -341,7 +341,7 @@ const PeoplePage = () => {
         <div className="lg:col-span-1">
           <div className="bg-white p-4 rounded-lg shadow-md sticky top-4">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Detalii Persoană</h2>
+              <h2 className="text-xl font-semibold">Detalii persoană</h2>
               
               {/* Butoane admin pentru editare/ștergere */}
               {isAdmin() && selectedPerson && !isEditing && (
@@ -485,7 +485,7 @@ const PeoplePage = () => {
                     to={`/harta?sector=${selectedPerson.sector_name}&grave=${selectedPerson.grave_number}`}
                     className="block w-full bg-primary hover:bg-primary/90 text-black font-bold text-center py-2 px-4 rounded-md transition-colors"
                   >
-                    Vezi pe Hartă
+                    Vezi pe hartă
                   </Link>
                 </div>
               </div>

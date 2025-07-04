@@ -397,7 +397,7 @@ const SectorDetailModal = ({ sector, graves, onClose, loading }) => {
         </div>
         
         {/* Body */}
-        <div className="p-6 overflow-y-auto flex-grow flex flex-col md:flex-row gap-6">
+        <div className="p-6  overflow-y-auto flex-grow flex flex-col md:flex-row gap-6">
           {/* Containerul pentru reprezentarea vizuală a sectorului */}
           <div className="flex-grow overflow-auto border rounded-lg p-4 bg-gray-50">
             <div className="mb-4 flex justify-between items-center">
@@ -590,7 +590,7 @@ const SectorDetailModal = ({ sector, graves, onClose, loading }) => {
                     name="details"
                     value={deceasedFormData.details}
                     onChange={handleDeceasedFormChange}
-                    rows="3"
+                    rows="2"
                     className="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
                   ></textarea>
                 </div>
@@ -599,7 +599,7 @@ const SectorDetailModal = ({ sector, graves, onClose, loading }) => {
                   <button
                     onClick={saveDeceasedChanges}
                     disabled={loadingDeceased}
-                    className="flex-1 bg-primary hover:bg-primary/90 text-black font-medium py-2 px-4 rounded-md transition-colors"
+                    className="flex-1 bg-gray-300 hover:bg-gray-400 text-black font-medium py-2 px-4 rounded-md transition-colors"
                   >
                     {loadingDeceased ? 'Se salvează...' : 'Salvează'}
                   </button>
@@ -616,7 +616,7 @@ const SectorDetailModal = ({ sector, graves, onClose, loading }) => {
                 {!addingNewDeceased && selectedDeceasedForEdit && (
                   <button
                     onClick={() => deleteDeceased(selectedDeceasedForEdit)}
-                    className="w-full mt-2 bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md transition-colors"
+                    className="w-full mt-1 mb-1 bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md transition-colors"
                   >
                     Șterge persoana
                   </button>
@@ -681,7 +681,7 @@ const SectorDetailModal = ({ sector, graves, onClose, loading }) => {
                   {loadingDeceased ? 'Se salvează...' : 'Salvează modificările'}
                 </button>
                 
-                <div className="border-t pt-4 mt-4">
+                <div className="border-t pt-2 mt-2">
                   <h4 className="font-semibold mb-2">Persoane decedate:</h4>
                   
                   {loadingDeceased ? (
@@ -689,7 +689,7 @@ const SectorDetailModal = ({ sector, graves, onClose, loading }) => {
                   ) : deceasedList.length > 0 ? (
                     <div className="space-y-4">
                       {deceasedList.map((deceased) => (
-                        <div key={deceased.id} className="border rounded p-3 flex justify-between items-center">
+                        <div key={deceased.id} className="border rounded p-2 flex justify-between items-center">
                           <div>
                             <p className="font-medium">{deceased.first_name} {deceased.last_name}</p>
                             <p className="text-sm text-gray-600">

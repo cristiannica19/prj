@@ -1,74 +1,8 @@
-// import { useState, useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import Layout from '../components/Layout';
-// import { useAuth } from '../context/AuthContext';
-// import axios from 'axios';
-
-// const ProfilePage = () => {
-//   const { user, logout, getAuthHeader } = useAuth();
-//   const [userGraves, setUserGraves] = useState([]);
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState('');
-//   const navigate = useNavigate();
-//   const [initialized, setInitialized] = useState(false);
-
-
-//  // Verificăm dacă utilizatorul este autentificat
-// useEffect(() => {
-//     if (!loading && !initialized) {
-//       setInitialized(true);
-      
-//       if (!user) {
-//         navigate('/login');
-//       } else {
-//         loadUserGraves();
-//       }
-//     }
-//   }, [loading, user, initialized, navigate]);  // Adaugă loading în dependențe
-
-//   // Încărcăm mormintele asociate cu utilizatorul
-//   const loadUserGraves = async () => {
-//     if (!user) return;
-
-//     try {
-//       setLoading(true);
-//       const response = await axios.get(
-//         `http://localhost:3000/api/graves/user/${user.id}`,
-//         { headers: getAuthHeader() }
-//       );
-//       setUserGraves(response.data);
-//     } catch (err) {
-//       console.error('Eroare la încărcarea mormintelor:', err);
-//       setError('Nu s-au putut încărca mormintele asociate.');
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const handleLogout = () => {
-//     logout();
-//     navigate('/login');
-//   };
-
-//     if (loading && !initialized) {
-//     return (
-//       <Layout>
-//         <div className="flex items-center justify-center h-screen">
-//           <p className="text-xl text-gray-600">Se verifică autentificarea...</p>
-//         </div>
-//       </Layout>
-//     );
-//   }
-
-//   if (!user) return null;
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
-// MODIFICARE: Importăm API_URL din configurație
-import { API_URL } from '../config/api.js';
 
 const ProfilePage = () => {
   const { user, logout, getAuthHeader } = useAuth();
@@ -78,8 +12,9 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const [initialized, setInitialized] = useState(false);
 
-  // Verificăm dacă utilizatorul este autentificat
-  useEffect(() => {
+
+ // Verificăm dacă utilizatorul este autentificat
+useEffect(() => {
     if (!loading && !initialized) {
       setInitialized(true);
       
@@ -89,7 +24,7 @@ const ProfilePage = () => {
         loadUserGraves();
       }
     }
-  }, [loading, user, initialized, navigate]);
+  }, [loading, user, initialized, navigate]);  // Adaugă loading în dependențe
 
   // Încărcăm mormintele asociate cu utilizatorul
   const loadUserGraves = async () => {
@@ -97,9 +32,8 @@ const ProfilePage = () => {
 
     try {
       setLoading(true);
-      // MODIFICARE: Folosim API_URL în loc de hardcoded localhost
       const response = await axios.get(
-        `${API_URL}/graves/user/${user.id}`,
+        `http://localhost:3000/api/graves/user/${user.id}`,
         { headers: getAuthHeader() }
       );
       setUserGraves(response.data);
@@ -116,7 +50,7 @@ const ProfilePage = () => {
     navigate('/login');
   };
 
-  if (loading && !initialized) {
+    if (loading && !initialized) {
     return (
       <Layout>
         <div className="flex items-center justify-center h-screen">
@@ -127,9 +61,6 @@ const ProfilePage = () => {
   }
 
   if (!user) return null;
-
-  // Restul componentei rămâne neschimbat
-  // ... (continuă cu JSX-ul pentru afișare)
 
   return (
     <Layout>
@@ -273,7 +204,6 @@ const ProfilePage = () => {
       </div>
     </Layout>
   );
-}
+};
 
 export default ProfilePage;
-

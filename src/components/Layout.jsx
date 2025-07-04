@@ -140,7 +140,7 @@ const Layout = ({ children }) => {
       <footer className="bg-primary text-white py-4">
         <div className="container mx-auto px-4">
           <p className="text-black text-center">
-            &copy; {new Date().getFullYear()} Sistem de Administrare a Cimitirului. Toate drepturile rezervate.
+          © Sistem de administrare a cimitirului. Licență FEAA 2025
           </p>
         </div>
       </footer>
